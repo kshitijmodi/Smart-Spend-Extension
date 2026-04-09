@@ -1,0 +1,231 @@
+/* SmartSpend — Reusable UI Components
+   All classes are prefixed with .ss- to avoid collisions. */
+
+/* ── Theme Variables ── */
+:root {
+  --ss-bg:         #0f0f13;
+  --ss-bg-card:    #1a1a24;
+  --ss-border:     #2a2a38;
+  --ss-text:       #e8e8f0;
+  --ss-text-2:     #9ca3af;
+  --ss-text-3:     #6b7280;
+  --ss-text-4:     #4b5563;
+  --ss-text-field: #c4c4d4;
+  --ss-blue:       #3b82f6;
+  --ss-blue-light: #93c5fd;
+  --ss-indigo:     #6366f1;
+  --ss-green:      #6ee7b7;
+  --ss-amber:      #f59e0b;
+  --ss-red:        #ef4444;
+  --ss-opt-bg:     #0f0f13;
+  --ss-opt-hover:  #3a3a4e;
+}
+
+:root.light-theme {
+  --ss-bg:         #f1f5f9;
+  --ss-bg-card:    #ffffff;
+  --ss-border:     #e2e8f0;
+  --ss-text:       #1e293b;
+  --ss-text-2:     #475569;
+  --ss-text-3:     #64748b;
+  --ss-text-4:     #94a3b8;
+  --ss-text-field: #334155;
+  --ss-blue:       #3b82f6;
+  --ss-blue-light: #1d4ed8;
+  --ss-indigo:     #4f46e5;
+  --ss-green:      #059669;
+  --ss-amber:      #b45309;
+  --ss-red:        #dc2626;
+  --ss-opt-bg:     #f8fafc;
+  --ss-opt-hover:  #cbd5e1;
+}
+
+/* ── Theme Toggle Button ── */
+.theme-toggle {
+  background: none;
+  border: 1.5px solid var(--ss-border, #2a2a38);
+  border-radius: 100px;
+  padding: 5px 9px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--ss-text-3, #6b7280);
+  line-height: 1;
+  flex-shrink: 0;
+}
+.theme-toggle:hover {
+  border-color: var(--ss-blue, #3b82f6);
+  color: var(--ss-blue, #3b82f6);
+}
+
+/* ── Loading Spinner ── */
+.ss-spinner {
+  width: 16px; height: 16px;
+  border: 2px solid var(--ss-border, #2a2a38);
+  border-top-color: var(--ss-blue, #3b82f6);
+  border-radius: 50%;
+  animation: ss-spin 0.7s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}
+@keyframes ss-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Progress Bar ── */
+.ss-progress-track {
+  width: 100%;
+  height: 6px;
+  background: var(--ss-border, #2a2a38);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.ss-progress-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, #6ee7b7, #3b82f6);
+  transition: width 0.5s ease;
+}
+.ss-progress-fill.warn {
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+}
+
+/* ── Stat Card ── */
+.ss-stat-card {
+  background: var(--ss-bg-card, #1a1a24);
+  border: 1px solid var(--ss-border, #2a2a38);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ss-stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ss-text-3, #6b7280);
+}
+.ss-stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ss-text, #e8e8f0);
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+}
+.ss-stat-sub {
+  font-size: 11px;
+  color: var(--ss-text-4, #4b5563);
+}
+
+/* ── Decision Badge ── */
+.ss-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.ss-badge.buy   { background: rgba(110,231,183,0.15); color: #6ee7b7; border: 1px solid rgba(110,231,183,0.3); }
+.ss-badge.wait  { background: rgba(245,158,11,0.15);  color: #f59e0b; border: 1px solid rgba(245,158,11,0.3);  }
+.ss-badge.avoid { background: rgba(239,68,68,0.15);   color: #ef4444; border: 1px solid rgba(239,68,68,0.3);  }
+.ss-badge.unknown { background: rgba(107,114,128,0.15); color: #6b7280; border: 1px solid rgba(107,114,128,0.3); }
+
+/* ── Step Indicator (wizard) ── */
+.ss-steps {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
+}
+.ss-step-dot {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--ss-border, #2a2a38);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: var(--ss-text-4, #4b5563);
+  background: var(--ss-bg-card, #1a1a24);
+  transition: all 0.25s;
+  flex-shrink: 0;
+}
+.ss-step-dot.active { border-color: var(--ss-blue, #3b82f6); color: var(--ss-blue-light, #93c5fd); background: rgba(59,130,246,0.12); }
+.ss-step-dot.done   { border-color: #6ee7b7; color: #0f0f13; background: #6ee7b7; }
+.ss-step-line {
+  flex: 1; height: 2px;
+  background: var(--ss-border, #2a2a38);
+  transition: background 0.25s;
+}
+.ss-step-line.done { background: #6ee7b7; }
+
+/* ── Help Text ── */
+.ss-help {
+  font-size: 12px;
+  color: var(--ss-text-4, #4b5563);
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
+/* ── Toast (animated) ── */
+.ss-toast {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: rgba(110,231,183,0.12);
+  border: 1px solid #6ee7b7;
+  color: #6ee7b7;
+  border-radius: 100px;
+  padding: 12px 24px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.ss-toast.show {
+  display: flex;
+  animation: ss-toast-in 0.2s ease;
+}
+@keyframes ss-toast-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Category Bar (dashboard) ── */
+.ss-cat-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+}
+.ss-cat-name {
+  font-size: 12px;
+  color: var(--ss-text-2, #9ca3af);
+  width: 80px;
+  flex-shrink: 0;
+}
+.ss-cat-track {
+  flex: 1;
+  height: 4px;
+  background: var(--ss-border, #2a2a38);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.ss-cat-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, #6ee7b7, #3b82f6);
+}
+.ss-cat-count {
+  font-size: 11px;
+  color: var(--ss-text-3, #6b7280);
+  width: 20px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── Mobile Responsive ── */
+@media (max-width: 520px) {
+  .ss-stat-card  { padding: 10px 12px; }
+  .ss-stat-value { font-size: 20px; }
+  .ss-cat-name   { width: 64px; }
+}
