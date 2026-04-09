@@ -591,8 +591,13 @@ async function run() {
       chrome.storage.local.set({ smartspend_history: [entry, ...history].slice(0, 100) });
 
     } catch (err) {
-      document.getElementById("ss-pill-text").textContent = "SmartSpend — error";
-      renderError("Couldn't reach the SmartSpend backend. Is it running?");
+      document.getElementById("ss-pill-text").textContent = "SmartSpend — offline";
+      renderError(
+        `Backend not running.<br><br>` +
+        `Open a terminal, go to <code>smart-spend-agent/</code> and run:<br>` +
+        `<code>start.bat</code> (Windows) or<br>` +
+        `<code>python -m uvicorn backend.main:app --port 8000</code>`
+      );
     }
   });
 }

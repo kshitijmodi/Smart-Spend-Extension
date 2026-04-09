@@ -4,8 +4,12 @@
   "version": "1.0.0",
   "description": "AI-powered purchase advisor. Get a BUY, WAIT, or AVOID signal on any checkout page.",
 
+  "background": {
+    "service_worker": "background.js"
+  },
+
   "permissions": ["storage"],
-  "host_permissions": ["<all_urls>"],
+  "host_permissions": ["<all_urls>", "http://localhost:8000/*"],
 
   "content_scripts": [
     {
