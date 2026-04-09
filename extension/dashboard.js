@@ -172,7 +172,7 @@ function renderHistory(history) {
       : "—";
     const date  = formatDate(h.ts);
     const site  = h.site || "";
-    const name  = h.item || "Unknown item";
+    const name  = h.product || h.item || "Unknown item";
 
     return `
       <div class="history-item">

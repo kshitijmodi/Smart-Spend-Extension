@@ -78,7 +78,7 @@ function renderLastItem(item) {
 
   if (!el || !nameEl || !metaEl || !badge) return;
 
-  nameEl.textContent  = item.item || "Unknown item";
+  nameEl.textContent  = item.product || item.item || "Unknown item";
   const price = item.price != null ? `$${parseFloat(item.price).toFixed(2)}` : "";
   const site  = item.site || "";
   metaEl.textContent  = [site, price].filter(Boolean).join(" · ");
