@@ -2,69 +2,155 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <link rel="stylesheet" href="components.css" />
+  <script src="theme.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      width: 240px;
+      width: 260px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #0f0f13;
-      color: #e8e8f0;
-      padding: 20px;
+      background: var(--ss-bg);
+      color: var(--ss-text);
+      padding: 18px;
+    }
+
+    .header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 14px;
     }
     .logo {
       font-size: 18px; font-weight: 800;
       background: linear-gradient(135deg, #6ee7b7, #3b82f6);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
-    .tagline { font-size: 11px; color: #4b5563; margin-bottom: 18px; }
+    .tagline { font-size: 11px; color: var(--ss-text-4); }
 
     .status-row {
       display: flex; align-items: center; gap: 8px;
-      padding: 10px 12px; border-radius: 10px;
-      background: #1a1a24; border: 1px solid #2a2a38;
-      font-size: 12px; color: #6b7280;
+      padding: 9px 12px; border-radius: 10px;
+      background: var(--ss-bg-card); border: 1px solid var(--ss-border);
+      font-size: 12px; color: var(--ss-text-3);
       margin-bottom: 10px;
     }
-    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4b5563; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ss-text-4); flex-shrink: 0; }
     .status-dot.active { background: #6ee7b7; }
-    #status-text { color: #9ca3af; }
+    #status-text { color: var(--ss-text-2); }
 
+    /* Budget section */
+    .budget-section {
+      display: none;
+      background: var(--ss-bg-card);
+      border: 1px solid var(--ss-border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+    }
+    .budget-section.visible { display: block; }
+    .budget-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 7px;
+    }
+    .budget-label { font-size: 11px; color: var(--ss-text-3); font-weight: 500; }
+    .budget-pct   { font-size: 11px; color: var(--ss-text-2); font-weight: 600; }
+
+    /* Last analyzed item */
+    .last-item {
+      display: none;
+      background: var(--ss-bg-card);
+      border: 1px solid var(--ss-border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+    }
+    .last-item.visible { display: block; }
+    .last-item-label {
+      font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      color: var(--ss-text-4); margin-bottom: 7px;
+    }
+    .last-item-row { display: flex; align-items: center; gap: 8px; }
+    .last-item-name {
+      flex: 1; font-size: 12px; font-weight: 500; color: var(--ss-text-field);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .last-item-meta { font-size: 10px; color: var(--ss-text-4); margin-top: 2px; }
+
+    /* Buttons */
     .btn {
       display: block; width: 100%;
-      padding: 10px; border-radius: 100px;
-      border: 1.5px solid #2a2a38;
-      background: #1a1a24; color: #9ca3af;
+      padding: 9px; border-radius: 100px;
+      border: 1.5px solid var(--ss-border);
+      background: var(--ss-bg-card); color: var(--ss-text-2);
       font-size: 12px; font-weight: 500;
       cursor: pointer; text-align: center;
       transition: all 0.15s;
-      margin-bottom: 8px;
+      margin-bottom: 7px;
     }
-    .btn:hover { border-color: #3b82f6; color: #93c5fd; }
+    .btn:hover { border-color: var(--ss-blue); color: var(--ss-blue-light); }
     .btn.primary {
       background: linear-gradient(135deg, #3b82f6, #6366f1);
       border-color: transparent; color: #fff; font-weight: 600;
     }
     .btn.primary:hover { opacity: 0.88; }
 
-    .footer { font-size: 10px; color: #374151; text-align: center; margin-top: 12px; }
+    .footer { font-size: 10px; color: var(--ss-text-4); text-align: center; margin-top: 10px; }
+
+    @media (max-width: 280px) {
+      body { width: 100%; padding: 14px; }
+    }
   </style>
 </head>
 <body>
-  <div class="logo">SmartSpend</div>
-  <div class="tagline">AI purchase advisor</div>
+  <div class="header-row">
+    <div>
+      <div class="logo">SmartSpend</div>
+      <div class="tagline">AI purchase advisor</div>
+    </div>
+    <button class="theme-toggle" id="theme-toggle">☀️</button>
+  </div>
 
   <div class="status-row">
     <div class="status-dot" id="profile-dot"></div>
     <span id="status-text">Checking profile…</span>
   </div>
 
+  <!-- Budget progress bar -->
+  <div class="budget-section" id="budget-section">
+    <div class="budget-row">
+      <span class="budget-label">Monthly budget</span>
+      <span class="budget-pct" id="budget-pct">—</span>
+    </div>
+    <div class="ss-progress-track">
+      <div class="ss-progress-fill" id="budget-fill" style="width:0%"></div>
+    </div>
+    <div style="font-size:10px;color:var(--ss-text-4);margin-top:5px;" id="budget-sub"></div>
+  </div>
+
+  <!-- Last analyzed purchase -->
+  <div class="last-item" id="last-item">
+    <div class="last-item-label">Last analyzed</div>
+    <div class="last-item-row">
+      <div style="flex:1;min-width:0;">
+        <div class="last-item-name" id="last-name">—</div>
+        <div class="last-item-meta" id="last-meta">—</div>
+      </div>
+      <span class="ss-badge unknown" id="last-badge">—</span>
+    </div>
+  </div>
+
   <button class="btn primary" id="setup-btn">⚙ Edit Profile</button>
+  <button class="btn" id="dashboard-btn">📊 Dashboard</button>
   <button class="btn" id="help-btn">How it works</button>
 
   <div class="footer">Works on any checkout page</div>
 
   <script src="popup.js"></script>
+
 </body>
 </html>

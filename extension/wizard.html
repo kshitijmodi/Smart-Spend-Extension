@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartSpend — Profile Setup</title>
+  <link rel="stylesheet" href="components.css" />
+  <script src="theme.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--ss-bg);
+      color: var(--ss-text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 40px 16px 80px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 540px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 36px;
+    }
+    .header-center { text-align: center; flex: 1; }
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #6ee7b7, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -1px;
+    }
+    .header-sub {
+      color: var(--ss-text-3);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    /* Step labels */
+    .step-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .step-label-item {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ss-text-4);
+      text-align: center;
+      flex: 1;
+      transition: color 0.2s;
+    }
+    .step-label-item.active { color: var(--ss-blue-light); }
+    .step-label-item.done   { color: #6ee7b7; }
+
+    /* Panel */
+    .panel {
+      display: none;
+      background: var(--ss-bg-card);
+      border: 1px solid var(--ss-border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 20px;
+      animation: panel-in 0.2s ease;
+    }
+    .panel.active { display: block; }
+    @keyframes panel-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ss-text);
+      margin-bottom: 6px;
+    }
+    .panel-desc {
+      font-size: 13px;
+      color: var(--ss-text-3);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    /* Field */
+    .field { margin-bottom: 24px; }
+    .field:last-child { margin-bottom: 0; }
+    .field-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ss-text-field);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    /* Options pills */
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .options input[type="radio"],
+    .options input[type="checkbox"] { display: none; }
+    .options label {
+      padding: 8px 16px;
+      border-radius: 100px;
+      border: 1.5px solid var(--ss-border);
+      font-size: 13px;
+      color: var(--ss-text-2);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+      background: var(--ss-opt-bg);
+    }
+    .options input[type="radio"]:checked + label,
+    .options input[type="checkbox"]:checked + label {
+      border-color: var(--ss-blue);
+      color: var(--ss-blue-light);
+      background: rgba(59,130,246,0.12);
+    }
+    .options label:hover {
+      border-color: var(--ss-opt-hover);
+      color: var(--ss-text);
+    }
+
+    /* Strictness rows */
+    #strictness-section { display: none; margin-top: 24px; }
+    .strictness-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ss-text-3);
+      margin-bottom: 12px;
+    }
+    .strictness-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--ss-border);
+      font-size: 13px;
+      color: var(--ss-text-field);
+    }
+    .strictness-row:last-child { border-bottom: none; }
+    .strictness-options { display: flex; gap: 6px; }
+    .strictness-options input[type="radio"] { display: none; }
+    .strictness-options label {
+      padding: 4px 12px;
+      border-radius: 100px;
+      border: 1.5px solid var(--ss-border);
+      font-size: 11px;
+      color: var(--ss-text-3);
+      cursor: pointer;
+      transition: all 0.15s;
+      background: var(--ss-opt-bg);
+    }
+    .strictness-options input[type="radio"]:checked + label {
+      border-color: #6ee7b7;
+      color: #6ee7b7;
+      background: rgba(110,231,183,0.08);
+    }
+
+    /* Nav bar */
+    .nav-bar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .btn {
+      padding: 12px 24px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: 1.5px solid var(--ss-border);
+    }
+    .btn-back {
+      background: transparent;
+      color: var(--ss-text-3);
+    }
+    .btn-back:hover { color: var(--ss-text-2); border-color: var(--ss-opt-hover); }
+    .btn-next {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      color: #fff;
+      border-color: transparent;
+      margin-left: auto;
+      min-width: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-next:hover { opacity: 0.88; }
+    .btn-next:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .error-msg {
+      display: none;
+      font-size: 12px;
+      color: var(--ss-red);
+      margin-top: 8px;
+    }
+    .error-msg.show { display: block; }
+
+    /* Success */
+    .success-panel {
+      display: none;
+      text-align: center;
+      padding: 48px 28px;
+      background: var(--ss-bg-card);
+      border: 1px solid var(--ss-border);
+      border-radius: 16px;
+    }
+    .success-panel.active { display: block; animation: panel-in 0.3s ease; }
+    .success-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    .success-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ss-text);
+      margin-bottom: 8px;
+    }
+    .success-sub {
+      font-size: 14px;
+      color: var(--ss-text-3);
+      line-height: 1.5;
+    }
+    .btn-done {
+      display: inline-block;
+      margin-top: 24px;
+      padding: 12px 32px;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-done:hover { opacity: 0.88; }
+
+    @media (max-width: 480px) {
+      body { padding: 24px 12px 60px; }
+      .panel { padding: 20px; }
+      .options label { padding: 7px 13px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="header-center">
+      <div class="logo">SmartSpend</div>
+      <div class="header-sub">Set up your profile in 4 quick steps</div>
+    </div>
+    <button class="theme-toggle" id="theme-toggle">☀️</button>
+  </div>
+
+  <!-- Step labels + indicators -->
+  <div class="step-labels" id="step-labels">
+    <div class="step-label-item active" data-step="0">Budget</div>
+    <div class="step-label-item" data-step="1">Style</div>
+    <div class="step-label-item" data-step="2">Behaviour</div>
+    <div class="step-label-item" data-step="3">Categories</div>
+  </div>
+  <div class="ss-steps" id="step-indicator">
+    <div class="ss-step-dot active" data-step="0">1</div>
+    <div class="ss-step-line" data-line="0"></div>
+    <div class="ss-step-dot" data-step="1">2</div>
+    <div class="ss-step-line" data-line="1"></div>
+    <div class="ss-step-dot" data-step="2">3</div>
+    <div class="ss-step-line" data-line="2"></div>
+    <div class="ss-step-dot" data-step="3">4</div>
+  </div>
+
+  <!-- Step 0: Budget -->
+  <div class="panel active" id="panel-0">
+    <div class="panel-title">Your Shopping Budget</div>
+    <div class="panel-desc">This helps SmartSpend gauge whether a purchase fits your monthly spending plan.</div>
+    <div class="field">
+      <span class="field-label">How much do you typically spend on shopping per month?</span>
+      <div class="options">
+        <input type="radio" name="budget" id="b1" value="under_100"><label for="b1">Under $100</label>
+        <input type="radio" name="budget" id="b2" value="100_300"><label for="b2">$100 – $300</label>
+        <input type="radio" name="budget" id="b3" value="300_600"><label for="b3">$300 – $600</label>
+        <input type="radio" name="budget" id="b4" value="600_1000"><label for="b4">$600 – $1,000</label>
+        <input type="radio" name="budget" id="b5" value="1000_plus"><label for="b5">$1,000+</label>
+      </div>
+      <div class="ss-help">We use this to calculate your budget usage and spending trends.</div>
+    </div>
+  </div>
+
+  <!-- Step 1: Spending Style -->
+  <div class="panel" id="panel-1">
+    <div class="panel-title">Your Spending Style</div>
+    <div class="panel-desc">A few quick questions about how you approach buying decisions.</div>
+
+    <div class="field">
+      <span class="field-label">How would you describe your risk tolerance when buying?</span>
+      <div class="options">
+        <input type="radio" name="risk" id="r1" value="conservative"><label for="r1">Conservative — I think twice</label>
+        <input type="radio" name="risk" id="r2" value="balanced"><label for="r2">Balanced — depends on the buy</label>
+        <input type="radio" name="risk" id="r3" value="liberal"><label for="r3">Liberal — I buy what I want</label>
+      </div>
+      <div class="ss-help">Conservative users get stricter AVOID/WAIT signals. Liberal users see more BUY recommendations.</div>
+    </div>
+
+    <div class="field">
+      <span class="field-label">How important is saving money right now?</span>
+      <div class="options">
+        <input type="radio" name="savings" id="s1" value="not_priority"><label for="s1">Not a priority</label>
+        <input type="radio" name="savings" id="s2" value="moderate"><label for="s2">Moderate</label>
+        <input type="radio" name="savings" id="s3" value="top_priority"><label for="s3">Top priority</label>
+      </div>
+      <div class="ss-help">If saving is a top priority, SmartSpend will be more cautious about recommending purchases.</div>
+    </div>
+
+    <div class="field">
+      <span class="field-label">What's your main financial goal right now?</span>
+      <div class="options">
+        <input type="radio" name="goal" id="g1" value="emergency_fund"><label for="g1">Emergency fund</label>
+        <input type="radio" name="goal" id="g2" value="debt_payoff"><label for="g2">Paying off debt</label>
+        <input type="radio" name="goal" id="g3" value="investing"><label for="g3">Investing</label>
+        <input type="radio" name="goal" id="g4" value="saving_purchase"><label for="g4">Saving for a purchase</label>
+        <input type="radio" name="goal" id="g5" value="no_goal"><label for="g5">No specific goal</label>
+      </div>
+      <div class="ss-help">Your goal shapes how SmartSpend weighs discretionary vs. essential spending.</div>
+    </div>
+  </div>
+
+  <!-- Step 2: Purchase Behaviour -->
+  <div class="panel" id="panel-2">
+    <div class="panel-title">Your Purchase Behaviour</div>
+    <div class="panel-desc">Honest answers here make your recommendations much more accurate.</div>
+    <div class="field">
+      <span class="field-label">How often do you make impulse purchases you later regret?</span>
+      <div class="options">
+        <input type="radio" name="impulse" id="i1" value="rarely"><label for="i1">Rarely</label>
+        <input type="radio" name="impulse" id="i2" value="sometimes"><label for="i2">Sometimes</label>
+        <input type="radio" name="impulse" id="i3" value="often"><label for="i3">Often</label>
+        <input type="radio" name="impulse" id="i4" value="very_often"><label for="i4">Very often</label>
+      </div>
+      <div class="ss-help">If you impulse-buy often, SmartSpend adds a cooling-off nudge before recommending BUY on non-essential items.</div>
+    </div>
+  </div>
+
+  <!-- Step 3: Categories -->
+  <div class="panel" id="panel-3">
+    <div class="panel-title">Your Shopping Categories</div>
+    <div class="panel-desc">Select the categories you regularly shop in so we can tailor advice per category.</div>
+    <div class="field">
+      <span class="field-label">Which categories do you regularly shop in?</span>
+      <div class="options" id="cat-options">
+        <input type="checkbox" name="cats" id="c1" value="Electronics"><label for="c1">Electronics</label>
+        <input type="checkbox" name="cats" id="c2" value="Clothing"><label for="c2">Clothing</label>
+        <input type="checkbox" name="cats" id="c3" value="Books"><label for="c3">Books</label>
+        <input type="checkbox" name="cats" id="c4" value="Home"><label for="c4">Home</label>
+        <input type="checkbox" name="cats" id="c5" value="Beauty"><label for="c5">Beauty</label>
+        <input type="checkbox" name="cats" id="c6" value="Sports"><label for="c6">Sports</label>
+        <input type="checkbox" name="cats" id="c7" value="Gaming"><label for="c7">Gaming</label>
+        <input type="checkbox" name="cats" id="c8" value="Food"><label for="c8">Food</label>
+        <input type="checkbox" name="cats" id="c9" value="Travel"><label for="c9">Travel</label>
+        <input type="checkbox" name="cats" id="c10" value="Other"><label for="c10">Other</label>
+      </div>
+      <div class="ss-help">Select all that apply — you can always update this later.</div>
+    </div>
+
+    <div id="strictness-section">
+      <div class="strictness-title">How strict per category?</div>
+      <div id="strictness-rows"></div>
+      <div class="ss-help" style="margin-top:10px;">Strict = more WAIT/AVOID signals. Lenient = more BUY signals.</div>
+    </div>
+  </div>
+
+  <!-- Success Panel -->
+  <div class="success-panel" id="success-panel">
+    <div class="success-icon">✓</div>
+    <div class="success-title">Profile saved!</div>
+    <div class="success-sub">SmartSpend is ready to help you make smarter purchases on any checkout page.</div>
+    <button class="btn-done" id="done-btn">Close</button>
+  </div>
+
+  <!-- Error -->
+  <div class="error-msg" id="error-msg">Please answer all questions before continuing.</div>
+
+  <!-- Navigation -->
+  <div class="nav-bar" id="nav-bar">
+    <button class="btn btn-back" id="back-btn" style="display:none;">← Back</button>
+    <button class="btn btn-next" id="next-btn">Continue →</button>
+  </div>
+
+</div>
+<script src="wizard.js"></script>
+</body>
+</html>

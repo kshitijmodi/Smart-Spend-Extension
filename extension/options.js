@@ -39,6 +39,7 @@ function rebuildStrictnessRows(savedStrictness = {}) {
 
   const section = document.getElementById("strictness-section");
   const container = document.getElementById("strictness-rows");
+  if (!section || !container) return;
   container.innerHTML = "";
 
   if (checked.length === 0) {
@@ -66,12 +67,16 @@ function rebuildStrictnessRows(savedStrictness = {}) {
 }
 
 // ---- Save ----
-document.getElementById("save-btn").addEventListener("click", () => {
-  const budget   = getRadio("budget");
-  const risk     = getRadio("risk");
-  const savings  = getRadio("savings");
-  const goal     = getRadio("goal");
-  const impulse  = getRadio("impulse");
+const saveBtnEl = document.getElementById("save-btn");
+if (saveBtnEl) saveBtnEl.addEventListener("click", () => {
+  const saveBtn = document.getElementById("save-btn");
+  const toast   = document.getElementById("toast");
+
+  const budget  = getRadio("budget");
+  const risk    = getRadio("risk");
+  const savings = getRadio("savings");
+  const goal    = getRadio("goal");
+  const impulse = getRadio("impulse");
 
   const categories = [...document.querySelectorAll('input[name="cats"]:checked')]
     .map(el => el.value);
@@ -83,26 +88,62 @@ document.getElementById("save-btn").addEventListener("click", () => {
   });
 
   if (!budget || !risk || !savings || !goal || !impulse) {
-    alert("Please complete all sections before saving.");
+    showError("Please complete all sections before saving.");
     return;
   }
 
+  // Loading state
+  saveBtn.disabled    = true;
+  saveBtn.textContent = "Saving…";
+  saveBtn.style.opacity = "0.7";
+
   const profile = {
     monthly_budget_range: budget,
-    risk_tolerance: risk,
-    savings_priority: savings,
-    financial_goal: goal,
-    impulse_frequency: impulse,
+    risk_tolerance:       risk,
+    savings_priority:     savings,
+    financial_goal:       goal,
+    impulse_frequency:    impulse,
     categories,
     category_strictness,
   };
 
   chrome.storage.sync.set({ smartspend_profile: profile }, () => {
-    const toast = document.getElementById("toast");
-    toast.classList.add("show");
-    setTimeout(() => toast.classList.remove("show"), 2500);
+    // Reset button
+    saveBtn.disabled    = false;
+    saveBtn.textContent = "Save Profile";
+    saveBtn.style.opacity = "";
+
+    if (chrome.runtime.lastError) {
+      showError("Failed to save — " + chrome.runtime.lastError.message);
+      return;
+    }
+
+    // Animated success toast
+    if (toast) {
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2500);
+    }
   });
 });
+
+function showError(msg) {
+  // Reuse the toast element with an error style, or fall back to a simple inline message
+  const existing = document.getElementById("save-error");
+  if (existing) {
+    existing.textContent = msg;
+    existing.style.display = "block";
+    setTimeout(() => { existing.style.display = "none"; }, 3500);
+    return;
+  }
+  // Create error element and insert before save bar
+  const el = document.createElement("div");
+  el.id = "save-error";
+  el.style.cssText = "color:#ef4444;font-size:12px;text-align:center;padding:8px 16px;";
+  el.textContent = msg;
+  const saveBar = document.querySelector(".save-bar");
+  if (saveBar) saveBar.prepend(el);
+  setTimeout(() => { el.style.display = "none"; }, 3500);
+}
 
 function getRadio(name) {
   const el = document.querySelector(`input[name="${name}"]:checked`);
