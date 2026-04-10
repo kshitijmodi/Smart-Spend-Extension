@@ -1,5 +1,13 @@
 // dashboard.js — SmartSpend spending insights
 
+document.addEventListener('DOMContentLoaded', function () {
+  var root = document.getElementById('ss-app');
+  if (root) {
+    var theme = localStorage.getItem('ss_theme') || 'dark';
+    root.classList.toggle('dark-mode', theme === 'dark');
+  }
+});
+
 const BUDGET_MAX = {
   under_100:  100,
   "100_300":  300,
