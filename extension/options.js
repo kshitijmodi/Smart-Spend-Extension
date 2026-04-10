@@ -1,5 +1,13 @@
 // options.js — SmartSpend profile setup
 
+document.addEventListener('DOMContentLoaded', function () {
+  var root = document.getElementById('ss-app');
+  if (root) {
+    var theme = localStorage.getItem('ss_theme') || 'dark';
+    root.classList.toggle('dark-mode', theme === 'dark');
+  }
+});
+
 const CATEGORIES = [
   "Electronics","Clothing","Books","Home",
   "Beauty","Sports","Gaming","Food","Travel","Other"

@@ -3,25 +3,6 @@
 
 /* ── Theme Variables ── */
 :root {
-  --ss-bg:         #0f0f13;
-  --ss-bg-card:    #1a1a24;
-  --ss-border:     #2a2a38;
-  --ss-text:       #e8e8f0;
-  --ss-text-2:     #9ca3af;
-  --ss-text-3:     #6b7280;
-  --ss-text-4:     #4b5563;
-  --ss-text-field: #c4c4d4;
-  --ss-blue:       #3b82f6;
-  --ss-blue-light: #93c5fd;
-  --ss-indigo:     #6366f1;
-  --ss-green:      #6ee7b7;
-  --ss-amber:      #f59e0b;
-  --ss-red:        #ef4444;
-  --ss-opt-bg:     #0f0f13;
-  --ss-opt-hover:  #3a3a4e;
-}
-
-:root.light-theme {
   --ss-bg:         #f1f5f9;
   --ss-bg-card:    #ffffff;
   --ss-border:     #e2e8f0;
@@ -38,6 +19,25 @@
   --ss-red:        #dc2626;
   --ss-opt-bg:     #f8fafc;
   --ss-opt-hover:  #cbd5e1;
+}
+
+.dark-mode {
+  --ss-bg:         #0f0f13;
+  --ss-bg-card:    #1a1a24;
+  --ss-border:     #2a2a38;
+  --ss-text:       #e8e8f0;
+  --ss-text-2:     #9ca3af;
+  --ss-text-3:     #6b7280;
+  --ss-text-4:     #4b5563;
+  --ss-text-field: #c4c4d4;
+  --ss-blue:       #3b82f6;
+  --ss-blue-light: #93c5fd;
+  --ss-indigo:     #6366f1;
+  --ss-green:      #6ee7b7;
+  --ss-amber:      #f59e0b;
+  --ss-red:        #ef4444;
+  --ss-opt-bg:     #0f0f13;
+  --ss-opt-hover:  #3a3a4e;
 }
 
 /* ── Theme Toggle Button ── */
