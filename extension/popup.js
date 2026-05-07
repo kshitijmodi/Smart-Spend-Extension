@@ -111,6 +111,6 @@ if (dashboardBtn) dashboardBtn.addEventListener("click", () => {
 const helpBtn = document.getElementById("help-btn");
 if (helpBtn) helpBtn.addEventListener("click", () => {
   chrome.tabs.create({
-    url: "https://github.com/your-repo/smart-spend-agent#readme",
+    url: chrome.runtime.getURL("README.md"),
   });
 });
