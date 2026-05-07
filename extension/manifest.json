@@ -31,7 +31,7 @@
 
   "web_accessible_resources": [
     {
-      "resources": ["wizard.html", "dashboard.html", "components.css"],
+      "resources": ["wizard.html", "dashboard.html", "components.css", "README.md"],
       "matches": ["<all_urls>"]
     }
   ]
