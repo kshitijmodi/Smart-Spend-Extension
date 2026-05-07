@@ -111,6 +111,6 @@ if (dashboardBtn) dashboardBtn.addEventListener("click", () => {
 const helpBtn = document.getElementById("help-btn");
 if (helpBtn) helpBtn.addEventListener("click", () => {
   chrome.tabs.create({
-    url: chrome.runtime.getURL("README.md"),
+    url: "https://github.com/kshitijmodi/Smart-Spend-Extension/blob/main/README.md",
   });
 });
