@@ -18,6 +18,6 @@ document.getElementById("setup-btn").addEventListener("click", () => {
 
 document.getElementById("help-btn").addEventListener("click", () => {
   chrome.tabs.create({
-    url: "https://github.com/your-repo/smart-spend-agent#readme",
+    url: "https://github.com/kshitijmodi/Smart-Spend-Extension#readme",
   });
 });
